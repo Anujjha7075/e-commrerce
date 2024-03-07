@@ -1,0 +1,39 @@
+const Mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
+const {
+    Schema
+} = Mongoose;
+
+const {
+    BaseOptions 
+} = require('../generics/BaseSchema');
+
+Mongoose.plugin(slug, BaseOptions);
+
+// {{Modelname}} Schema
+const {{ModelName}}Schema = new Schema({
+    _id: {
+        type: Schema.ObjectId,
+        auto: true
+    },
+    {{#each schemaFields}}
+    {{name}}: {
+        type: {{type}},
+        required: {{#if required}}{{required}}{{else}}false{{/if}},
+        {{#if (notEmpty default)}}
+        default: {{default}},
+        {{/if}}
+    },
+    {{/each}}
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    updated: Date,
+    created: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+module.exports = Mongoose.model('{{ModelName}}', {{ModelName}}Schema);
